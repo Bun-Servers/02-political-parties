@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./favicon.ico" />
+    <title>Web Socket Client</title>
+  </head>
+  <body>
+    <h1>STATUS</h1>
+    <p id="status">Connecting</p>
+
+    <button id="btn-disconnect">Disconnect</button>
+    <button id="btn-connect">Connect</button>
+
+    <form id="message-form" style="display: none">
+      <h1>Messages</h1>
+      <input type="text" id="input-message" placeholder="Message" />
+      <button id="send">Send</button>
+    </form>
+
+    <ul id="messages"></ul>
+    <script>
+      // Cookies
+      const session = {
+        id: 1,
+        sessionId: "Abc123",
+      };
+
+      const JWT = "MiTokenMuySeguro12345";
+
+      document.cookie = `session=${JSON.stringify(session)}`;
+      document.cookie = `X-Token=${JWT}`;
+
+      let socket;
+
+      const status = document.getElementById("status");
+      const messageForm = document.getElementById("message-form");
+      const inputMessage = document.getElementById("input-message");
+      const messagesContainer = document.getElementById("messages");
+
+      const btnSend = document.getElementById("send");
+      const btnConnect = document.getElementById("btn-connect");
+      const btnDisconnect = document.getElementById("btn-disconnect");
+
+      const createWebSocket = () => {
+        const channelId = "mi-canal-personalizado";
+        const socket = new WebSocket(
+          `ws://localhost:3200?channelId=${channelId}`,
+        );
+
+        socket.onopen = () => {
+          console.log("WebSocket Connected");
+          messageForm.style.display = "block";
+          status.textContent = "Connected";
+        };
+
+        socket.onclose = () => {
+          console.log("WebSocket Disconnected");
+          messageForm.style.display = "none";
+          status.textContent = "Disconnected";
+        };
+
+        socket.onerror = (event) => {
+          console.error("WebSocket Error: ", event);
+        };
+
+        socket.onmessage = (event) => {
+          showMessage(event.data);
+        };
+
+        return socket;
+      };
+
+      socket = createWebSocket();
+
+      btnDisconnect.addEventListener("click", () => {
+        if (socket.readyState !== WebSocket.OPEN) return;
+        socket.close();
+      });
+
+      btnConnect.addEventListener("click", () => {
+        if (socket.readyState === WebSocket.OPEN) return;
+        socket = createWebSocket();
+      });
+
+      messageForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!inputMessage.value) return;
+        socket.send(inputMessage.value);
+        inputMessage.value = "";
+      });
+
+      const showMessage = (message) => {
+        const li = document.createElement("li");
+        li.textContent = message;
+        messagesContainer.appendChild(li);
+      };
+    </script>
+  </body>
+</html>

@@ -2,6 +2,7 @@ import { SERVER_CONFIG } from "./config/server.config";
 import indexHtlm from "../public/index.html";
 import { generateUUID } from "./utils/generate-uuid";
 import type { WebSocketData } from "./types";
+import { handleMessage } from "./handlers/message.handler";
 
 export const createServer = () => {
   return Bun.serve<WebSocketData>({
@@ -19,11 +20,11 @@ export const createServer = () => {
       return new Response("Upgrade failed", { status: 500 });
     },
     websocket: {
-      message(ws, message) {
-        console.log(`Message from ${ws.data.clientId}: ${message}`);
-      },
       open(ws) {
-        console.log(`WebSocket opened for client: ${ws.data.clientId}`);
+        ws.subscribe(SERVER_CONFIG.defaultChannelName);
+      },
+      message(ws, message: string) {
+        const response = handleMessage(message);
       },
       close(ws, code, message) {
         console.log(

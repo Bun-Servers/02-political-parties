@@ -44,6 +44,7 @@ export const createServer = () => {
         console.log(
           `WebSocket closed for client: ${ws.data.clientId}, Code: ${code}, Message: ${message}`,
         );
+        ws.unsubscribe(SERVER_CONFIG.defaultChannelName);
       },
     },
   });

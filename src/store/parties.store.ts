@@ -22,7 +22,7 @@ export class PartiesStore {
     this.state.parties.push(party);
   }
 
-  remove(id: string): boolean {
+  delete(id: string): boolean {
     const initialLength = this.state.parties.length;
 
     this.state.parties = this.state.parties.filter((party) => party.id !== id);

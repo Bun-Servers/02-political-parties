@@ -94,7 +94,7 @@
       const showMessage = (message) => {
         const li = document.createElement("li");
         li.textContent = message;
-        messagesContainer.appendChild(li);
+        messagesContainer.prepend(li);
       };
     </script>
   </body>

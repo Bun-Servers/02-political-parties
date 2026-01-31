@@ -1,3 +1,4 @@
+import { messageSchema } from "../schemas/websocket-message.schema";
 import { partyService } from "../services/party.service";
 import type { WebSocketMessage, WebSocketResponse } from "../types";
 
@@ -111,7 +112,17 @@ export const handleMessage = (message: string): WebSocketResponse => {
   try {
     const jsonData: WebSocketMessage = JSON.parse(message);
 
-    const { type, payload } = jsonData;
+    const parsedResult = messageSchema.safeParse(jsonData);
+
+    if (!parsedResult.success) {
+      const errorMessage = parsedResult.error.issues
+        .map((issue) => issue.message)
+        .join(", ");
+
+      return createErrorResponse(`Invalid message format: ${errorMessage}`);
+    }
+
+    const { type, payload } = parsedResult.data;
 
     switch (type) {
       case "GET_PARTIES":

@@ -34,6 +34,7 @@ class PartyService {
     if (updates.name) party.name = updates.name;
     if (updates.color) party.color = updates.color;
     if (updates.borderColor) party.borderColor = updates.borderColor;
+    if (updates.votes !== undefined) party.votes = updates.votes;
 
     return party;
   }

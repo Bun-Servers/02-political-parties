@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./styles.css" />
     <title>Web Socket Client</title>
   </head>
   <body>
@@ -92,9 +93,9 @@
       });
 
       const showMessage = (message) => {
-        const li = document.createElement("li");
-        li.textContent = message;
-        messagesContainer.prepend(li);
+        const pre = document.createElement("pre");
+        pre.innerHTML = JSON.stringify(JSON.parse(message), null, 2);
+        messagesContainer.prepend(pre);
       };
     </script>
   </body>

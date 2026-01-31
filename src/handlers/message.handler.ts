@@ -1,4 +1,7 @@
-import { messageSchema } from "../schemas/websocket-message.schema";
+import {
+  messageSchema,
+  type MessageParsed,
+} from "../schemas/websocket-message.schema";
 import { partyService } from "../services/party.service";
 import type { WebSocketMessage, WebSocketResponse } from "../types";
 
@@ -16,8 +19,10 @@ const handleGetParties = (): WebSocketResponse => {
   };
 };
 
-const handleAddParty = (payload: any): WebSocketResponse => {
-  if (!payload.name || !payload.color || !payload.borderColor) {
+const handleAddParty = (
+  payload: MessageParsed["payload"],
+): WebSocketResponse => {
+  if (!payload?.name || !payload?.color || !payload?.borderColor) {
     return createErrorResponse("Invalid payload for ADD_PARTY");
   }
 
@@ -33,8 +38,10 @@ const handleAddParty = (payload: any): WebSocketResponse => {
   };
 };
 
-const handleUpdateParty = (payload: any): WebSocketResponse => {
-  if (!payload.id) {
+const handleUpdateParty = (
+  payload: MessageParsed["payload"],
+): WebSocketResponse => {
+  if (!payload?.id) {
     return createErrorResponse("Invalid payload for UPDATE_PARTY");
   }
 
@@ -55,8 +62,10 @@ const handleUpdateParty = (payload: any): WebSocketResponse => {
   };
 };
 
-const handleDeleteParty = (payload: any): WebSocketResponse => {
-  if (!payload.id) {
+const handleDeleteParty = (
+  payload: MessageParsed["payload"],
+): WebSocketResponse => {
+  if (!payload?.id) {
     return createErrorResponse("Invalid payload for DELETE_PARTY");
   }
 
@@ -74,8 +83,10 @@ const handleDeleteParty = (payload: any): WebSocketResponse => {
   };
 };
 
-const handleIncrementVotes = (payload: any): WebSocketResponse => {
-  if (!payload.id) {
+const handleIncrementVotes = (
+  payload: MessageParsed["payload"],
+): WebSocketResponse => {
+  if (!payload?.id) {
     return createErrorResponse("Invalid payload for INCREMENT_VOTES");
   }
 
@@ -91,8 +102,10 @@ const handleIncrementVotes = (payload: any): WebSocketResponse => {
   };
 };
 
-const handleDecrementVotes = (payload: any): WebSocketResponse => {
-  if (!payload.id) {
+const handleDecrementVotes = (
+  payload: MessageParsed["payload"],
+): WebSocketResponse => {
+  if (!payload?.id) {
     return createErrorResponse("Invalid payload for DECREMENT_VOTES");
   }
 
